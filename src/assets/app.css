@@ -1,0 +1,184 @@
+.App {
+  height: 100vh;
+  background-color: #b8c6db;
+  background-image: linear-gradient(315deg, #b8c6db 0%, #f5f7fa 74%);
+  overflow: scroll;
+  text-align: center;
+  overflow: hidden;
+}
+
+.container {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 0 30px 0 30px;
+  color: white;
+  position: relative;
+}
+
+.authed-container {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  padding: 30px;
+}
+
+.header {
+  margin: 0;
+}
+
+.candy-title {
+  font-size: 50px;
+  font-weight: bold;
+  background: -webkit-linear-gradient(left, #ff8867, #ff52ff);
+  background-size: 50% 50%;
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.candy-icon {
+  margin: 0;
+  font-size: 50px;
+  font-weight: bold;
+}
+
+.sub-text {
+  font-size: 25px;
+  background: -webkit-linear-gradient(left, #60c657 30%, #35aee2 60%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.gradient-text {
+  background: -webkit-linear-gradient(left, #60c657 30%, #35aee2 60%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.cta-button {
+  height: 45px;
+  border: 0;
+  width: auto;
+  padding-left: 40px;
+  padding-right: 40px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
+  margin: auto;
+}
+
+.connect-wallet-button {
+  color: white;
+  background: -webkit-linear-gradient(left, #ff8867, #ff52ff);
+  background-size: 200% 200%;
+}
+
+.mint-button {
+  width: 50vw;
+  background: -webkit-linear-gradient(left, #4e44ce, #35aee2);
+  background-size: 200% 200%;
+  color: white;
+  font-size: 20px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.footer-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  width: 100%;
+  bottom: 0;
+  left: 0;
+  /* padding-bottom: 45px; */
+}
+
+.twitter-logo {
+  width: 35px;
+  height: 35px;
+}
+
+.footer-text {
+  font-size: 16px;
+  font-weight: bold;
+  color: white;
+}
+.box {
+  box-shadow: 0 2px 4px rgb(255 136 103 / 3%), 0 4px 8px rgb(255 82 255 / 5%),
+    0 4px 8px rgb(255 136 103 / 6%), 0 8px 16px rgb(255 82 255 / 7%),
+    0 8px 16px rgb(255 136 103 / 9%), 0 16px 32px rgb(255 82 255 / 12%);
+  min-height: 200px;
+  width: 50vw;
+  margin: auto;
+  margin-bottom: 16px;
+  background: white;
+  border-radius: 16px;
+  font-size: 20px;
+}
+.label {
+  color: rgb(255 136 103);
+  font-weight: 500;
+}
+.data {
+  color: rgb(255 82 255);
+  font-weight: 400;
+  font-size: 18px;
+}
+.connected-container input[type="text"] {
+  display: inline-block;
+  padding: 10px;
+  width: 50%;
+  height: 60px;
+  font-size: 16px;
+  box-sizing: border-box;
+  background-color: rgba(0, 0, 0, 0.25);
+  border: none;
+  border-radius: 10px;
+  margin: 50px auto;
+}
+
+.connected-container button {
+  height: 50px;
+}
+
+/* Countdown Timer */
+
+.machine-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.gif-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.gif-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-gap: 1.5rem;
+  justify-items: center;
+  margin: 0;
+  padding: 20px 0 20px 0;
+}
+
+.gif-grid .gif-item {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  justify-self: center;
+  align-self: center;
+}
+
+.gif-item img {
+  width: 100%;
+  height: 200px;
+  border-radius: 10px;
+  object-fit: cover;
+}

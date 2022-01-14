@@ -1,0 +1,19 @@
+{
+  "name": "JOACHIM_ANDERSON",
+  "symbol": "",
+  "image": "0.png",
+  "properties": {
+    "files": [
+      {
+        "uri": "0.png",
+        "type": "image/png"
+      }
+    ],
+    "creators": [
+      {
+        "address": "GGY36Vuq7AiGkk2zbXq45hYdT69oHEEYFXD2zvAFDnZQ",
+        "share": 100
+      }
+    ]
+  }
+}

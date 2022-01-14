@@ -1,0 +1,19 @@
+{
+  "name": "MICHAEL_OLISE",
+  "symbol": "",
+  "image": "2.png",
+  "properties": {
+    "files": [
+      {
+        "uri": "2.png",
+        "type": "image/png"
+      }
+    ],
+    "creators": [
+      {
+        "address": "GGY36Vuq7AiGkk2zbXq45hYdT69oHEEYFXD2zvAFDnZQ",
+        "share": 100
+      }
+    ]
+  }
+}

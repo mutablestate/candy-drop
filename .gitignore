@@ -1,0 +1,7 @@
+/node_modules/
+/dist/
+/.vscode/
+.DS_Store
+.env
+/.cache/
+/src/assets/.cache/
