@@ -1,10 +1,6 @@
 import "./assets/app.css";
+// @ts-ignore
 import App from "./App.svelte";
-
-(window as any).global = window;
-if (global === undefined) {
-  var global = window;
-}
 
 const app = new App({
   target: document.getElementById("app"),

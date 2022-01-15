@@ -1,15 +1,25 @@
 import { defineConfig } from "vite";
 import { svelte } from "@sveltejs/vite-plugin-svelte";
-import inject from "@rollup/plugin-inject";
+import nodePolyfills from "rollup-plugin-polyfill-node";
+import borsh from "borsh";
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [svelte(), inject({ Buffer: ["buffer", "Buffer"] })],
+  plugins: [svelte(), nodePolyfills()],
   define: {
-    global: {},
+    borsh,
     "process.env.NODE_DEBUG": JSON.stringify(""),
   },
   optimizeDeps: {
-    include: ["buffer"],
+    exclude: [],
+  },
+  build: {
+    rollupOptions: {
+      external: [
+        "@solana/web3.js",
+        "@solana/wallet-adapter-base",
+        "@project-serum/anchor",
+      ],
+    },
   },
 });

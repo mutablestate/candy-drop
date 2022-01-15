@@ -1,8 +1,8 @@
 <script>
   import { onMount } from "svelte";
-  import { Connection, PublicKey } from "@solana/web3.js";
-  import { Program, Provider, web3 } from "@project-serum/anchor";
-  import { MintLayout, TOKEN_PROGRAM_ID, Token } from "@solana/spl-token";
+  import * as solanaWeb3 from "@solana/web3.js";
+  import * as anchor from "@project-serum/anchor";
+  import * as splToken from "@solana/spl-token";
 
   import { sendTransactions } from "../utils/connection";
   import {
@@ -22,13 +22,11 @@
   let candyMachine;
   let isMinting = false;
 
-  const { SystemProgram } = web3;
-
   // Solana provider
   function getProvider() {
     const rpcHost = import.meta.env.VITE_SOLANA_RPC_HOST;
-    const connection = new Connection(rpcHost);
-    const provider = new Provider(connection, window.solana, {
+    const connection = new solanaWeb3.Connection(rpcHost);
+    const provider = new anchor.Provider(connection, window.solana, {
       preflightCommitment: "processed",
     });
     return provider;
@@ -38,10 +36,10 @@
     const provider = getProvider();
 
     // Get metadata about your deployed candy machine program
-    const idl = await Program.fetchIdl(candyMachineProgram, provider);
+    const idl = await anchor.Program.fetchIdl(candyMachineProgram, provider);
 
     // Create a program that you can call
-    const program = new Program(idl, candyMachineProgram, provider);
+    const program = new anchor.Program(idl, candyMachineProgram, provider);
 
     // Fetch the metadata from your candy machine
     candyMachine = await program.account.candyMachine.fetch(
@@ -117,8 +115,8 @@
   }
 
   async function getCandyMachineCreator(candyMachine) {
-    const candyMachineID = new PublicKey(candyMachine);
-    return await web3.PublicKey.findProgramAddress(
+    const candyMachineID = new solanaWeb3.PublicKey(candyMachine);
+    return await anchor.web3.PublicKey.findProgramAddress(
       [Buffer.from("candy_machine"), candyMachineID.toBuffer()],
       candyMachineProgram
     );
@@ -126,7 +124,7 @@
 
   async function getMetadata(mint) {
     return (
-      await PublicKey.findProgramAddress(
+      await solanaWeb3.PublicKey.findProgramAddress(
         [
           Buffer.from("metadata"),
           TOKEN_METADATA_PROGRAM_ID.toBuffer(),
@@ -139,7 +137,7 @@
 
   async function getMasterEdition(mint) {
     return (
-      await PublicKey.findProgramAddress(
+      await solanaWeb3.PublicKey.findProgramAddress(
         [
           Buffer.from("metadata"),
           TOKEN_METADATA_PROGRAM_ID.toBuffer(),
@@ -163,18 +161,18 @@
       { pubkey: walletAddress, isSigner: false, isWritable: false },
       { pubkey: splTokenMintAddress, isSigner: false, isWritable: false },
       {
-        pubkey: web3.SystemProgram.programId,
+        pubkey: anchor.web3.SystemProgram.programId,
         isSigner: false,
         isWritable: false,
       },
-      { pubkey: TOKEN_PROGRAM_ID, isSigner: false, isWritable: false },
+      { pubkey: splToken.TOKEN_PROGRAM_ID, isSigner: false, isWritable: false },
       {
-        pubkey: web3.SYSVAR_RENT_PUBKEY,
+        pubkey: anchor.web3.SYSVAR_RENT_PUBKEY,
         isSigner: false,
         isWritable: false,
       },
     ];
-    return new web3.TransactionInstruction({
+    return new anchor.web3.TransactionInstruction({
       keys,
       programId: SPL_ASSOCIATED_TOKEN_ACCOUNT_PROGRAM_ID,
       data: Buffer.from([]),
@@ -183,7 +181,7 @@
 
   async function mintToken() {
     isMinting = true;
-    const mint = web3.Keypair.generate();
+    const mint = anchor.web3.Keypair.generate();
     const { tokenMint, gatekeeper, whitelistMintSettings, price, treasury } =
       $candyMachineData.state;
     const program = $candyMachineData.program;
@@ -201,18 +199,18 @@
     const signers = [mint];
     const cleanupInstructions = [];
     const instructions = [
-      web3.SystemProgram.createAccount({
+      anchor.web3.SystemProgram.createAccount({
         fromPubkey: walletAddress.publicKey,
         newAccountPubkey: mint.publicKey,
-        space: MintLayout.span,
+        space: splToken.MintLayout.span,
         lamports:
           await program.provider.connection.getMinimumBalanceForRentExemption(
-            MintLayout.span
+            splToken.MintLayout.span
           ),
-        programId: TOKEN_PROGRAM_ID,
+        programId: splToken.TOKEN_PROGRAM_ID,
       }),
-      Token.createInitMintInstruction(
-        TOKEN_PROGRAM_ID,
+      splToken.Token.createInitMintInstruction(
+        splToken.TOKEN_PROGRAM_ID,
         mint.publicKey,
         0,
         walletAddress.publicKey,
@@ -224,8 +222,8 @@
         walletAddress.publicKey,
         mint.publicKey
       ),
-      Token.createMintToInstruction(
-        TOKEN_PROGRAM_ID,
+      splToken.Token.createMintToInstruction(
+        splToken.TOKEN_PROGRAM_ID,
         mint.publicKey,
         userTokenAccountAddress,
         walletAddress.publicKey,
@@ -260,7 +258,7 @@
     }
 
     if (whitelistMintSettings) {
-      const mint = new web3.PublicKey(whitelistMintSettings.mint);
+      const mint = new anchor.web3.PublicKey(whitelistMintSettings.mint);
 
       const whitelistToken = (
         await getAtaForMint(mint, walletAddress.publicKey)
@@ -272,7 +270,7 @@
       });
 
       if (whitelistMintSettings.mode.burnEveryTime) {
-        const whitelistBurnAuthority = web3.Keypair.generate();
+        const whitelistBurnAuthority = anchor.web3.Keypair.generate();
 
         remainingAccounts.push({
           pubkey: mint,
@@ -290,8 +288,8 @@
         );
         if (exists) {
           instructions.push(
-            Token.createApproveInstruction(
-              TOKEN_PROGRAM_ID,
+            splToken.Token.createApproveInstruction(
+              splToken.TOKEN_PROGRAM_ID,
               whitelistToken,
               whitelistBurnAuthority.publicKey,
               walletAddress.publicKey,
@@ -300,8 +298,8 @@
             )
           );
           cleanupInstructions.push(
-            Token.createRevokeInstruction(
-              TOKEN_PROGRAM_ID,
+            splToken.Token.createRevokeInstruction(
+              splToken.TOKEN_PROGRAM_ID,
               whitelistToken,
               walletAddress.publicKey,
               []
@@ -312,7 +310,7 @@
     }
 
     if (tokenMint) {
-      const transferAuthority = web3.Keypair.generate();
+      const transferAuthority = anchor.web3.Keypair.generate();
 
       signers.push(transferAuthority);
       remainingAccounts.push({
@@ -327,8 +325,8 @@
       });
 
       instructions.push(
-        Token.createApproveInstruction(
-          TOKEN_PROGRAM_ID,
+        splToken.Token.createApproveInstruction(
+          splToken.TOKEN_PROGRAM_ID,
           userPayingAccountAddress,
           transferAuthority.publicKey,
           walletAddress.publicKey,
@@ -337,8 +335,8 @@
         )
       );
       cleanupInstructions.push(
-        Token.createRevokeInstruction(
-          TOKEN_PROGRAM_ID,
+        splToken.Token.createRevokeInstruction(
+          splToken.TOKEN_PROGRAM_ID,
           userPayingAccountAddress,
           walletAddress.publicKey,
           []
@@ -365,12 +363,12 @@
           mintAuthority: walletAddress.publicKey,
           updateAuthority: walletAddress.publicKey,
           tokenMetadataProgram: TOKEN_METADATA_PROGRAM_ID,
-          tokenProgram: TOKEN_PROGRAM_ID,
-          systemProgram: SystemProgram.programId,
-          rent: web3.SYSVAR_RENT_PUBKEY,
-          clock: web3.SYSVAR_CLOCK_PUBKEY,
-          recentBlockhashes: web3.SYSVAR_RECENT_BLOCKHASHES_PUBKEY,
-          instructionSysvarAccount: web3.SYSVAR_INSTRUCTIONS_PUBKEY,
+          tokenProgram: splToken.TOKEN_PROGRAM_ID,
+          systemProgram: anchor.web3.SystemProgram.programId,
+          rent: anchor.web3.SYSVAR_RENT_PUBKEY,
+          clock: anchor.web3.SYSVAR_CLOCK_PUBKEY,
+          recentBlockhashes: anchor.web3.SYSVAR_RECENT_BLOCKHASHES_PUBKEY,
+          instructionSysvarAccount: anchor.web3.SYSVAR_INSTRUCTIONS_PUBKEY,
         },
         remainingAccounts:
           remainingAccounts.length > 0 ? remainingAccounts : undefined,

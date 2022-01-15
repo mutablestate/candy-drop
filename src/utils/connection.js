@@ -1,6 +1,5 @@
-import { Transaction } from "@solana/web3.js";
-
-import { WalletNotConnectedError } from "@solana/wallet-adapter-base";
+import * as solanaWeb3 from "@solana/web3.js";
+import * as solanaWallet from "@solana/wallet-adapter-base";
 
 export const getErrorForTransaction = async (connection, txid) => {
   // wait for all confirmation before geting transaction
@@ -107,7 +106,7 @@ export const sendTransactions = async (
   failCallback = (txid, ind) => false,
   block
 ) => {
-  if (!wallet.publicKey) throw new WalletNotConnectedError();
+  if (!wallet.publicKey) throw new solanaWallet.WalletNotConnectedError();
 
   const unsignedTxns = [];
 
@@ -123,7 +122,7 @@ export const sendTransactions = async (
       continue;
     }
 
-    let transaction = new Transaction();
+    let transaction = new solanaWeb3.Transaction();
     instructions.forEach((instruction) => transaction.add(instruction));
     transaction.recentBlockhash = block.blockhash;
     transaction.setSigners(
@@ -204,9 +203,9 @@ export const sendTransaction = async (
   includesFeePayer = false,
   block
 ) => {
-  if (!wallet.publicKey) throw new WalletNotConnectedError();
+  if (!wallet.publicKey) throw new solanaWallet.WalletNotConnectedError();
 
-  let transaction = new Transaction();
+  let transaction = new solanaWeb3.Transaction();
   instructions.forEach((instruction) => transaction.add(instruction));
   transaction.recentBlockhash = (
     block || (await connection.getRecentBlockhash(commitment))
@@ -271,9 +270,9 @@ export const sendTransactionWithRetry = async (
   block,
   beforeSend
 ) => {
-  if (!wallet.publicKey) throw new WalletNotConnectedError();
+  if (!wallet.publicKey) throw new solanaWallet.WalletNotConnectedError();
 
-  let transaction = new Transaction();
+  let transaction = new solanaWeb3.Transaction();
   instructions.forEach((instruction) => transaction.add(instruction));
   transaction.recentBlockhash = (
     block || (await connection.getRecentBlockhash(commitment))
