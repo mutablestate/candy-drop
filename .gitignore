@@ -1,7 +1,10 @@
 /node_modules/
-/dist/
 /.vscode/
 .DS_Store
 .env
 /.cache/
 /src/assets/.cache/
+public/build/bundle.*
+public/*.png
+public/*.svg
+yarn-error.log

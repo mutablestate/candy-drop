@@ -1,8 +1,8 @@
-<script lang="ts">
+<script>
   import { onMount } from "svelte";
 
-  export let goLiveData: number;
-  export let goLiveDateTimeString: string;
+  export let goLiveData;
+  export let goLiveDateTimeString;
 
   let time = new Date();
   const dropDate = new Date(goLiveData * 1000);

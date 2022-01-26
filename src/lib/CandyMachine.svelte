@@ -24,7 +24,7 @@
 
   // Solana provider
   function getProvider() {
-    const rpcHost = import.meta.env.VITE_SOLANA_RPC_HOST;
+    const rpcHost = process.env.SOLANA_RPC_HOST;
     const connection = new solanaWeb3.Connection(rpcHost);
     const provider = new anchor.Provider(connection, window.solana, {
       preflightCommitment: "processed",
@@ -43,7 +43,7 @@
 
     // Fetch the metadata from your candy machine
     candyMachine = await program.account.candyMachine.fetch(
-      import.meta.env.VITE_CANDY_MACHINE_ID
+      process.env.CANDY_MACHINE_ID
     );
 
     // Parse out all our metadata and log it out
@@ -73,7 +73,7 @@
     )}`;
 
     candyMachineData.set({
-      id: import.meta.env.VITE_CANDY_MACHINE_ID,
+      id: process.env.CANDY_MACHINE_ID,
       program,
       state: {
         itemsAvailable,
